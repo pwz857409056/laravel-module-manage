@@ -1,0 +1,42 @@
+{
+    "name": "powitz/laravel-module-manage",
+    "description": "Laravel Module management",
+    "autoload": {
+        "psr-4": {
+            "Powitz\\LaravelModuleManage\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "keywords": [
+        "modules",
+        "laravel",
+        "powitz",
+        "module"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "powitz",
+            "email": "powitz@163.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2|^8.0",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "laravel/framework": "^9.19"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Powitz\\LaravelModuleManage\\ServiceProvider"
+            ],
+            "aliases": {
+                "Module": "Powitz\\LaravelModuleManage\\Facades\\Module"
+            }
+        }
+    }
+}
