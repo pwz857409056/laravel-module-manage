@@ -11,10 +11,7 @@ trait ModuleCommandTrait
      */
     public function getModuleName(): string
     {
-        $module = $this->argument('module') ?: app('modules')->getUsedNow();
-
-        $module = app('modules')->findOrFail($module);
-
+        $module = app('modules')->findOrFail();
         return $module->getStudlyName();
     }
 }

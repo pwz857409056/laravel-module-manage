@@ -9,11 +9,11 @@ use Symfony\Component\Console\Input\InputArgument;
 class $CLASS$ extends Command
 {
     /**
-     * The name and signature of the console command.
+     * The console command name.
      *
      * @var string
      */
-    protected $name = '$COMMAND_NAME$';
+    protected $signature = '$COMMAND_NAME$';
 
     /**
      * The console command description.
@@ -40,29 +40,5 @@ class $CLASS$ extends Command
     public function handle()
     {
         //
-    }
-
-    /**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return [
-            ['example', InputArgument::REQUIRED, 'An example argument.'],
-        ];
-    }
-
-    /**
-     * Get the console command options.
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [
-            ['example', null, InputOption::VALUE_OPTIONAL, 'An example option.', null],
-        ];
     }
 }

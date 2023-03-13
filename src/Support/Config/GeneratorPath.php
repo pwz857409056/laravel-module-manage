@@ -4,9 +4,9 @@ namespace Powitz\LaravelModuleManage\Support\Config;
 
 class GeneratorPath
 {
-    private $path;
-    private $generate;
-    private $namespace;
+    private mixed $path;
+    private mixed $generate;
+    private mixed $namespace;
 
     public function __construct($config)
     {
@@ -18,7 +18,7 @@ class GeneratorPath
             return;
         }
         $this->path = $config;
-        $this->generate = (bool) $config;
+        $this->generate = (bool)$config;
         $this->namespace = $config;
     }
 
@@ -37,7 +37,7 @@ class GeneratorPath
         return $this->namespace;
     }
 
-    private function convertPathToNamespace($path)
+    private function convertPathToNamespace($path): array|string
     {
         return str_replace('/', '\\', $path);
     }

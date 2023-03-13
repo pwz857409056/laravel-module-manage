@@ -63,7 +63,7 @@ class FileGenerator extends Generator
      *
      * @return $this
      */
-    public function setContents($contents): static
+    public function setContents(mixed $contents): static
     {
         $this->contents = $contents;
 
@@ -97,9 +97,9 @@ class FileGenerator extends Generator
     /**
      * Get path.
      *
-     * @return mixed
+     * @return string
      */
-    public function getPath(): mixed
+    public function getPath(): string
     {
         return $this->path;
     }
@@ -127,6 +127,7 @@ class FileGenerator extends Generator
 
     /**
      * Generate the file.
+     * @throws FileAlreadyExistException
      */
     public function generate(): bool|int
     {

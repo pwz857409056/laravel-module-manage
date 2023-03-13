@@ -32,11 +32,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Powitz\\LaravelModuleManage\\ServiceProvider"
+                "Powitz\\LaravelModuleManage\\ModuleServiceProvider"
             ],
-            "aliases": {
-                "Module": "Powitz\\LaravelModuleManage\\Facades\\Module"
-            }
         }
     }
 }

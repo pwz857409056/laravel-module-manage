@@ -8,32 +8,45 @@ use Powitz\LaravelModuleManage\Generators\FileGenerator;
 
 abstract class GeneratorCommand extends Command
 {
+
     /**
      * The name of 'name' argument.
      *
      * @var string
      */
-    protected $argumentName = '';
+    protected string $argumentName = '';
 
     /**
      * Get template contents.
      *
-     * @return string
+     * @return mixed
      */
-    abstract protected function getTemplateContents();
+    abstract protected function getTemplateContents(): mixed;
 
     /**
      * Get the destination file path.
      *
      * @return string
      */
-    abstract protected function getDestinationFilePath();
+    abstract protected function getDestinationFilePath(): string;
 
     /**
      * Execute the console command.
      */
     public function handle(): int
     {
+        $moduleName = $this->argument('module');
+        if (!$moduleName) {
+            $this->error('You should input the name of module');
+            return E_ERROR;
+        }
+
+        if (!app('modules')->isExist($moduleName)) {
+            $this->error('Module not found, use command package:make to create module first');
+            return E_ERROR;
+        }
+
+        app('modules')->setModuleName($moduleName);
         $path = str_replace('\\', '/', $this->getDestinationFilePath());
 
         if (!$this->laravel['files']->isDirectory($dir = dirname($path))) {
@@ -43,13 +56,12 @@ abstract class GeneratorCommand extends Command
         $contents = $this->getTemplateContents();
 
         try {
-            $this->components->task("Generating file {$path}", function () use ($path, $contents) {
-                $overwriteFile = $this->hasOption('force') ? $this->option('force') : false;
-                (new FileGenerator($path, $contents))->withFileOverwrite($overwriteFile)->generate();
-            });
+            $overwriteFile = $this->hasOption('force') ? $this->option('force') : false;
+            (new FileGenerator($path, $contents))->withFileOverwrite($overwriteFile)->generate();
 
+            $this->info("Created : {$path}");
         } catch (FileAlreadyExistException $e) {
-            $this->components->error("File : {$path} already exists.");
+            $this->error("File : {$path} already exists.");
 
             return E_ERROR;
         }
@@ -62,7 +74,7 @@ abstract class GeneratorCommand extends Command
      *
      * @return string
      */
-    public function getClass()
+    public function getClass(): string
     {
         return class_basename($this->argument($this->argumentName));
     }
@@ -80,11 +92,11 @@ abstract class GeneratorCommand extends Command
     /**
      * Get class namespace.
      *
-     * @param  $module
      *
+     * @param $module
      * @return string
      */
-    public function getClassNamespace($module)
+    public function getClassNamespace($module): string
     {
         $extra = str_replace($this->getClass(), '', $this->argument($this->argumentName));
 
