@@ -11,6 +11,7 @@ use Powitz\LaravelModuleManage\Support\Config\GenerateConfigReader;
 use Powitz\LaravelModuleManage\Support\Stub;
 use Throwable;
 
+
 class MakeModuleCommand extends Command
 {
     /**
@@ -28,16 +29,16 @@ class MakeModuleCommand extends Command
     protected Module $module;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $moduleName;
+    private ?string $moduleName;
 
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $signature = 'module:make {name}';
+    protected $signature = 'module:make {name?}';
 
     /**
      * The console command description.
@@ -65,11 +66,17 @@ class MakeModuleCommand extends Command
     public function handle(): void
     {
         $this->moduleName = $this->argument('name');
-        throw_if(empty($this->moduleName), 'argument name is empty');
+        if (empty($this->moduleName)) {
+            $this->components->error("argument name is empty");
+            return;
+        }
+        if (app('modules')->isExist($this->moduleName)) {
+            $this->components->error("Module already exists");
+            return;
+        }
         app('modules')->setModuleName($this->moduleName);
         $this->filesystem = $this->laravel['files'];
         $this->module = $this->laravel['modules'];
-
         $this->generateFolders();
         $this->generateFiles();
         $this->generateResources();
@@ -108,9 +115,7 @@ class MakeModuleCommand extends Command
             if ($folder->generate() === false) {
                 continue;
             }
-
             $path = config('modules.paths.modules') . '/' . $this->getModuleName() . '/' . $folder->getPath();
-
             $this->filesystem->makeDirectory($path, 0755, true);
             if (config('modules.stubs.gitkeep')) {
                 $this->generateGitKeep($path);

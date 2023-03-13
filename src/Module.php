@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 
 class Module
 {
-    private string $moduleName;
+    private ?string $moduleName;
 
     public function setModuleName($moduleName): void
     {
