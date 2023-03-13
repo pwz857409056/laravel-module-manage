@@ -33,7 +33,7 @@
         "laravel": {
             "providers": [
                 "Powitz\\LaravelModuleManage\\ModuleServiceProvider"
-            ],
+            ]
         }
     }
 }
