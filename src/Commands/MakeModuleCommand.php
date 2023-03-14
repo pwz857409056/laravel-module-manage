@@ -177,6 +177,27 @@ class MakeModuleCommand extends Command
                 'module' => $this->getModuleName(),
             ]);
         }
+        $this->call('module:make-accept-header', [
+            'name' => 'AcceptHeader',
+            'module' => $this->getModuleName(),
+        ]);
+        $this->call('module:enable-cross-request', [
+            'name' => 'EnableCrossRequest',
+            'module' => $this->getModuleName(),
+        ]);
+        $this->call('module:make-controller', [
+            'controller' => 'BaseController',
+            'module' => $this->getModuleName(),
+            '--base' => true
+        ]);
+        $this->call('module:make-form-request', [
+            'name' => 'FormRequest',
+            'module' => $this->getModuleName(),
+        ]);
+        $this->call('module:make-scene-validator', [
+            'name' => 'SceneValidator',
+            'module' => $this->getModuleName(),
+        ]);
     }
 
     /**

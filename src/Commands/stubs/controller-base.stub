@@ -1,0 +1,13 @@
+<?php
+
+namespace $CLASS_NAMESPACE$;
+
+use App\Helpers\ApiResponse;
+use App\Http\Controllers\Controller;
+
+class $CLASS$ extends Controller
+{
+    // API接口响应
+    use ApiResponse;
+    protected $service;
+}

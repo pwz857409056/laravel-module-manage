@@ -3,58 +3,209 @@
 namespace $NAMESPACE$;
 
 use Illuminate\Support\ServiceProvider;
-
+use Illuminate\Foundation\AliasLoader;
+use Illuminate\Contracts\Http\Kernel as HttpKernel;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Modules\$MODULE$\Http\Middleware\AcceptHeader;
+use Modules\$MODULE$\Http\Middleware\EnableCrossRequest;
 class $CLASS$ extends ServiceProvider
 {
     /**
+     * 模块名称
+     *
      * @var string $moduleName
      */
-    protected $moduleName = '$MODULE$';
+    protected string $moduleName = '$MODULE$';
 
     /**
+     * 模块名称小写
+     *
      * @var string $moduleNameLower
      */
-    protected $moduleNameLower = '$LOWER_NAME$';
+    protected string $moduleNameLower = '$LOWER_NAME$';
 
     /**
-     * Boot the application events.
+     * 别名
      *
-     * @return void
+     * @var array
      */
-    public function boot()
+    protected array $alias = [];
+
+    /**
+     * 脚本
+     *
+     * @var array
+     */
+    protected array $commands = [
+
+    ];
+
+    /**
+     * 路由中间件
+     *
+     * @var array
+     */
+    protected array $routeMiddleware = [];
+
+    /**
+     * 中间件分组
+     *
+     * @var array
+     */
+    protected array $middlewareGroups = [
+        'api' => [
+            'throttle:api',
+        ]
+    ];
+
+    /**
+     * 服务提供者
+     *
+     * @var array
+     */
+    protected array $providers = [
+        RouteServiceProvider::class,
+    ];
+
+    /**
+     * @desc:注册
+     *
+     * @author: pwz<857409056@qq.com>
+     */
+    public function register(): void
     {
+        //注册配置
         $this->registerConfig();
+        //注册别名
+        $this->registerAlias();
+        //注册绑定
+        $this->registerBind();
+        //注册路由中间件
+        $this->registerRouteMiddleware();
+        //注册服务
+        $this->registerProviders();
     }
 
     /**
-     * Register the service provider.
+     * @desc:启动
      *
-     * @return void
+     * @throws BindingResolutionException
+     * @author: pwz<857409056@qq.com>
      */
-    public function register()
+    public function boot(): void
     {
-        $this->app->register(RouteServiceProvider::class);
+        //全局中间件
+        $this->bootGlobalMiddleware();
+        //命令
+        $this->bootCommand();
+        //模型事件
+        $this->bootObserver();
+        //同步debug状态为当前模块debug状态
+        $this->app['config']->set('debug', $this->app['config']->get($this->moduleNameLower . '.debug'));
     }
 
     /**
-     * Register config.
+     * @desc:注册配置
      *
-     * @return void
+     * @author: pwz<857409056@qq.com>
      */
-    protected function registerConfig()
+    protected function registerConfig(): void
     {
         $this->mergeConfigFrom(
-            dirname(__DIR__) . '/$PATH_CONFIG$/config.php', $this->moduleNameLower
+                dirname(__DIR__) . '/Config/config.php', $this->moduleNameLower
         );
     }
 
     /**
-     * Get the services provided by the provider.
+     * @desc:注册绑定
      *
-     * @return array
+     * @author: pwz<857409056@qq.com>
      */
-    public function provides()
+    protected function registerBind(): void
     {
-        return [];
+        //
+    }
+
+    /**
+     * @desc:注册路由中间件
+     *
+     * @author: pwz<857409056@qq.com>
+     */
+    protected function registerRouteMiddleware(): void
+    {
+        // 注册路由中间件
+        foreach ($this->routeMiddleware as $key => $middleware) {
+            app('router')->aliasMiddleware($key, $middleware);
+        }
+
+        // 注册路由中间件组
+        foreach ($this->middlewareGroups as $key => $middleware) {
+            app('router')->middlewareGroup($key, $middleware);
+        }
+    }
+
+    /**
+     * @desc:注册服务
+     *
+     * @author: pwz<857409056@qq.com>
+     */
+    public function registerProviders(): void
+    {
+        foreach ($this->providers as $provider) {
+            $this->app->register($provider);
+        }
+    }
+
+    /**
+     * @desc:全局中间件
+     *
+     * @throws BindingResolutionException
+     * @author: pwz<857409056@qq.com>
+     */
+    protected function bootGlobalMiddleware(): void
+    {
+        //api json 格式返回
+        $this->app
+            ->make(HttpKernel::class)
+            ->prependMiddleware(AcceptHeader::class);
+
+        // 跨域处理
+        $this->app
+            ->make(HttpKernel::class)
+            ->pushMiddleware(EnableCrossRequest::class);
+    }
+
+    /**
+     * @desc:脚本
+     *
+     * @author: pwz<857409056@qq.com>
+     */
+    protected function bootCommand(): void
+    {
+        if ($this->app->runningInConsole()) {
+            $this->commands($this->commands);
+        }
+    }
+
+    /**
+     * @desc:注册别名
+     *
+     * @author: pwz<857409056@qq.com>
+     */
+    protected function registerAlias(): void
+    {
+        foreach ($this->alias as $alias => $class) {
+            AliasLoader::getInstance()->alias($alias, $class);
+        }
+    }
+
+    /**
+     * @desc:模型事件
+     *
+     * @author: pwz<857409056@qq.com>
+     */
+    public function bootObserver()
+    {
+        //
     }
 }
