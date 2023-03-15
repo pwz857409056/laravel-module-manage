@@ -58,7 +58,7 @@ class EnableCrossRequestMakeCommand extends GeneratorCommand
      */
     protected function getTemplateContents(): mixed
     {
-        $module = $this->laravel['modules']->findOrFail($this->getModuleName());
+        $module = $this->laravel['modules'];
 
         return (new Stub('/middleware/enable-cross-request.stub', [
             'NAMESPACE' => $this->getClassNamespace($module),

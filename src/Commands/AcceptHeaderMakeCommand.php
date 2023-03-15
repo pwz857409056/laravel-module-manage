@@ -58,7 +58,7 @@ class AcceptHeaderMakeCommand extends GeneratorCommand
      */
     protected function getTemplateContents(): mixed
     {
-        $module = $this->laravel['modules']->findOrFail($this->getModuleName());
+        $module = $this->laravel['modules'];
 
         return (new Stub('/middleware/accept-header.stub', [
             'NAMESPACE' => $this->getClassNamespace($module),

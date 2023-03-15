@@ -58,7 +58,7 @@ class FormRequestMakeCommand extends GeneratorCommand
      */
     protected function getTemplateContents(): mixed
     {
-        $module = $this->laravel['modules']->findOrFail($this->getModuleName());
+        $module = $this->laravel['modules'];
 
         return (new Stub('/request/form-request.stub', [
             'NAMESPACE' => $this->getClassNamespace($module),

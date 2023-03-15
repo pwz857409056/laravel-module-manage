@@ -54,7 +54,7 @@ class RouteProviderMakeCommand extends GeneratorCommand
      */
     protected function getTemplateContents(): string
     {
-        $module = $this->laravel['modules']->findOrFail($this->getModuleName());
+        $module = $this->laravel['modules'];
 
         return (new Stub('/route-provider.stub', [
             'NAMESPACE' => $this->getClassNamespace($module),

@@ -32,7 +32,6 @@ return [
         */
         'generator' => [
             'config' => ['path' => 'Config', 'generate' => true],
-            'exceptions' => ['path' => 'Exceptions', 'generate' => true],
             'model' => ['path' => 'Models', 'generate' => true],
             'routes' => ['path' => 'Routes', 'generate' => true],
             'controller' => ['path' => 'Http/Controllers', 'generate' => true],

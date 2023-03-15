@@ -71,7 +71,7 @@ class CommandMakeCommand extends GeneratorCommand
      */
     protected function getTemplateContents(): mixed
     {
-        $module = $this->laravel['modules']->findOrFail($this->getModuleName());
+        $module = $this->laravel['modules'];
 
         return (new Stub('/command.stub', [
             'COMMAND_NAME' => $this->getCommandName(),

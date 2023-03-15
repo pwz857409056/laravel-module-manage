@@ -23,11 +23,6 @@ class Module
         return strtolower($this->moduleName);
     }
 
-    public function findOrFail(string $name = ''): static
-    {
-        return $this;
-    }
-
     public function getStudlyName(): string
     {
         return Str::studly($this->moduleName);
@@ -41,11 +36,6 @@ class Module
     public function getModulePath($module): string
     {
         return $this->getPath() . '/' . Str::studly($module) . '/';
-    }
-
-    public function getUsedNow(): string
-    {
-        return $this->moduleName;
     }
 
     public function getPath(): string

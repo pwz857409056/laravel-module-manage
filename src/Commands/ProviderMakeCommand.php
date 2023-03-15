@@ -75,7 +75,7 @@ class ProviderMakeCommand extends GeneratorCommand
         $stub = $this->option('master') ? 'scaffold/provider' : 'provider';
 
         /** @var Module $module */
-        $module = $this->laravel['modules']->findOrFail($this->getModuleName());
+        $module = $this->laravel['modules'];
 
         return (new Stub('/' . $stub . '.stub', [
             'NAMESPACE' => $this->getClassNamespace($module),

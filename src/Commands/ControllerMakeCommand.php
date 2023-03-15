@@ -53,7 +53,7 @@ class ControllerMakeCommand extends GeneratorCommand
      */
     protected function getTemplateContents(): string
     {
-        $module = $this->laravel['modules']->findOrFail($this->getModuleName());
+        $module = $this->laravel['modules'];
 
         return (new Stub($this->getStubName(), [
             'MODULENAME' => $module->getStudlyName(),
