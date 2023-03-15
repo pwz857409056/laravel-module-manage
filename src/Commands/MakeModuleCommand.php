@@ -9,6 +9,8 @@ use Illuminate\Support\Str;
 use Powitz\LaravelModuleManage\Module;
 use Powitz\LaravelModuleManage\Support\Config\GenerateConfigReader;
 use Powitz\LaravelModuleManage\Support\Stub;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
 
 
@@ -55,7 +57,15 @@ class MakeModuleCommand extends Command
     public function __construct()
     {
         parent::__construct();
+    }
 
+    public function initialize(InputInterface $input, OutputInterface $output)
+    {
+        parent::initialize($input, $output);
+        $this->moduleName = $this->argument('name');
+        $this->filesystem = $this->laravel['files'];
+        $this->module = $this->laravel['modules'];
+        $this->module->setModuleName($this->moduleName);
     }
 
     /**
@@ -66,18 +76,14 @@ class MakeModuleCommand extends Command
      */
     public function handle(): void
     {
-        $this->moduleName = $this->argument('name');
         if (empty($this->moduleName)) {
             $this->components->error("argument name is empty");
             return;
         }
-        if (app('modules')->isExist($this->moduleName)) {
+        if ($this->module->isExist($this->moduleName)) {
             $this->components->error("Module already exists");
             return;
         }
-        app('modules')->setModuleName($this->moduleName);
-        $this->filesystem = $this->laravel['files'];
-        $this->module = $this->laravel['modules'];
         $this->generateFolders();
         $this->generateFiles();
         $this->generateResources();

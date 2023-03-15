@@ -1,0 +1,13 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="DotEnvDuplicateKeyInspection" enabled="true" level="GRAMMAR_ERROR" enabled_by_default="true" editorAttributes="GRAMMAR_ERROR" />
+    <inspection_tool class="DotEnvExtraBlankLineInspection" enabled="true" level="GRAMMAR_ERROR" enabled_by_default="true" editorAttributes="GRAMMAR_ERROR" />
+    <inspection_tool class="DotEnvIncorrectDelimiterInspection" enabled="true" level="GRAMMAR_ERROR" enabled_by_default="true" editorAttributes="GRAMMAR_ERROR" />
+    <inspection_tool class="DotEnvLeadingCharacterInspection" enabled="true" level="GRAMMAR_ERROR" enabled_by_default="true" editorAttributes="GRAMMAR_ERROR" />
+    <inspection_tool class="DotEnvLowercaseKeyInspection" enabled="true" level="GRAMMAR_ERROR" enabled_by_default="true" editorAttributes="GRAMMAR_ERROR" />
+    <inspection_tool class="DotEnvSpaceAroundSeparatorInspection" enabled="true" level="GRAMMAR_ERROR" enabled_by_default="true" editorAttributes="GRAMMAR_ERROR" />
+    <inspection_tool class="DotEnvSpaceInsideNonQuotedInspection" enabled="true" level="GRAMMAR_ERROR" enabled_by_default="true" editorAttributes="GRAMMAR_ERROR" />
+    <inspection_tool class="DotEnvTrailingWhitespaceInspection" enabled="true" level="GRAMMAR_ERROR" enabled_by_default="true" editorAttributes="GRAMMAR_ERROR" />
+  </profile>
+</component>
