@@ -6,6 +6,10 @@ use Illuminate\Support\ServiceProvider;
 use Powitz\LaravelModuleManage\Commands;
 use Powitz\LaravelModuleManage\Support\Stub;
 
+/**
+ * @desc:模块服务提供
+ * @author: powitz<powitz@163.com>
+ */
 class ModuleServiceProvider extends ServiceProvider
 {
     public function boot()
@@ -23,13 +27,13 @@ class ModuleServiceProvider extends ServiceProvider
             Commands\SceneValidatorMakeCommand::class,
         ]);
         $this->publishes([
-            dirname(__DIR__, 1) . '/config/config.php' => config_path('module.php'),
-        ], 'module');
+            dirname(__DIR__, 1) . '/config/config.php' => config_path('modules.php'),
+        ], 'modules');
     }
 
     public function register()
     {
-        $publishedConfig = config_path('module.php');
+        $publishedConfig = config_path('modules.php');
         if (file_exists($publishedConfig)) {
             $this->mergeConfigFrom($publishedConfig, 'modules');
         } else {
@@ -39,7 +43,6 @@ class ModuleServiceProvider extends ServiceProvider
         $path = config('modules.stubs.path') ?? __DIR__ . '/Commands/stubs';
         Stub::setBasePath($path);
 
-        $this->app->singleton(Module::class);
-        $this->app->alias(Module::class, 'modules');
+        $this->app->singleton('modules', Module::class);
     }
 }
