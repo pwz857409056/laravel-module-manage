@@ -37,12 +37,12 @@ abstract class GeneratorCommand extends Command
     {
         $moduleName = $this->argument('module');
         if (!$moduleName) {
-            $this->error('You should input the name of module');
+            $this->components->error('You should input the name of module');
             return E_ERROR;
         }
 
-        if (!app('modules')->isExist($moduleName)) {
-            $this->error('Module not found, use command package:make to create module first');
+        if (!app('modules')->has($moduleName)) {
+            $this->components->error("{$moduleName} Module not found, use command module:make to create module first");
             return E_ERROR;
         }
 
@@ -61,7 +61,7 @@ abstract class GeneratorCommand extends Command
 
             $this->info("Created : {$path}");
         } catch (FileAlreadyExistException $e) {
-            $this->error("File : {$path} already exists.");
+            $this->components->error("File : {$path} already exists.");
 
             return E_ERROR;
         }

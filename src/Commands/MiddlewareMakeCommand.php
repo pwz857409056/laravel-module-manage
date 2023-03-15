@@ -33,6 +33,7 @@ class MiddlewareMakeCommand extends GeneratorCommand
      */
     protected $description = 'Create a new middleware class for the specified module.';
 
+
     public function getDefaultNamespace(): string
     {
         $module = $this->laravel['modules'];
@@ -73,7 +74,6 @@ class MiddlewareMakeCommand extends GeneratorCommand
     protected function getDestinationFilePath(): string
     {
         $path = $this->laravel['modules']->getModulePath($this->getModuleName());
-
         $middlewarePath = GenerateConfigReader::read('filter');
 
         return $path . $middlewarePath->getPath() . '/' . $this->getFileName() . '.php';

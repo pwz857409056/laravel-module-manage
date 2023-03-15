@@ -77,7 +77,7 @@ class Module
      * @param $module
      * @return bool
      */
-    public function isExist($module): bool
+    public function has($module): bool
     {
         return file_exists($this->getModulePath($module));
     }

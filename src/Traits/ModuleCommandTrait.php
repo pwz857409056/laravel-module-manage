@@ -11,7 +11,6 @@ trait ModuleCommandTrait
      */
     public function getModuleName(): string
     {
-        $module = app('modules');
-        return $module->getStudlyName();
+        return app('modules')->getStudlyName();
     }
 }
