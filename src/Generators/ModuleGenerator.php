@@ -287,26 +287,40 @@ class ModuleGenerator
                 'module' => $this->getName(),
             ]);
         }
-        $this->console->call('module:make-accept-header', [
-            'name' => 'AcceptHeader',
+        if (GenerateConfigReader::read('response-enum')->generate() === true) {
+            $this->console->call('module:make-response-enum', [
+                'name' => 'response-enum',
+                'module' => $this->getName(),
+            ]);
+            $this->console->call('module:make-base-service', [
+                'name' => 'base-service',
+                'module' => $this->getName(),
+            ]);
+        }
+        $this->console->call('module:make-middleware', [
+            'name' => 'accept-header',
             'module' => $this->getName(),
+            '--master' => true,
         ]);
-        $this->console->call('module:enable-cross-request', [
-            'name' => 'EnableCrossRequest',
+        $this->console->call('module:make-middleware', [
+            'name' => 'enable-cross-request',
             'module' => $this->getName(),
+            '--master' => true,
         ]);
         $this->console->call('module:make-controller', [
             'controller' => 'BaseController',
             'module' => $this->getName(),
-            '--base' => true
+            '--master' => true
         ]);
-        $this->console->call('module:make-form-request', [
-            'name' => 'FormRequest',
+        $this->console->call('module:make-request', [
+            'name' => 'form-request',
             'module' => $this->getName(),
+            '--master' => true
         ]);
-        $this->console->call('module:make-scene-validator', [
-            'name' => 'SceneValidator',
+        $this->console->call('module:make-request', [
+            'name' => 'scene-validator',
             'module' => $this->getName(),
+            '--master' => true
         ]);
     }
 

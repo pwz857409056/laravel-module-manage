@@ -7,8 +7,9 @@ use Powitz\LaravelModuleManage\Support\Config\GenerateConfigReader;
 use Powitz\LaravelModuleManage\Support\Stub;
 use Powitz\LaravelModuleManage\Traits\ModuleCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
-class EnableCrossRequestMakeCommand extends GeneratorCommand
+class RequestMakeCommand extends GeneratorCommand
 {
     use ModuleCommandTrait;
 
@@ -24,20 +25,20 @@ class EnableCrossRequestMakeCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $name = 'module:enable-cross-request';
+    protected $name = 'module:make-request';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a new middleware class for the specified module.';
+    protected $description = 'Create a new form request class for the specified module.';
 
     public function getDefaultNamespace(): string
     {
         $module = $this->laravel['modules'];
 
-        return $module->config('paths.generator.filter.namespace') ?: $module->config('paths.generator.filter.path', 'Http/Middleware');
+        return $module->config('paths.generator.request.namespace') ?: $module->config('paths.generator.request.path', 'Http/Requests');
     }
 
     /**
@@ -48,35 +49,44 @@ class EnableCrossRequestMakeCommand extends GeneratorCommand
     protected function getArguments(): array
     {
         return [
-            ['name', InputArgument::REQUIRED, 'The name of the command.'],
+            ['name', InputArgument::REQUIRED, 'The name of the form request class.'],
             ['module', InputArgument::OPTIONAL, 'The name of module will be used.'],
         ];
     }
 
     /**
-     * @return mixed
+     * @return array
      */
-    protected function getTemplateContents(): mixed
+    protected function getOptions(): array
+    {
+        return [
+            ['master', null, InputOption::VALUE_NONE, 'Indicates the master middleware', null],
+        ];
+    }
+
+    /**
+     * @return string|array|bool
+     */
+    protected function getTemplateContents(): string|array|bool
     {
         $module = $this->laravel['modules'];
-
-        return (new Stub('/middleware/enable-cross-request.stub', [
+        $stub = $this->option('master') ? '/scaffold' . DIRECTORY_SEPARATOR . $this->argument('name') . '.stub' : DIRECTORY_SEPARATOR . 'request.stub';
+        return (new Stub($stub, [
             'NAMESPACE' => $this->getClassNamespace($module),
             'CLASS' => $this->getClass(),
-            'LOWER_NAME' => $module->getLowerName(),
         ]))->render();
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     protected function getDestinationFilePath(): string
     {
         $path = $this->laravel['modules']->getModulePath($this->getModuleName());
 
-        $middlewarePath = GenerateConfigReader::read('filter');
+        $requestPath = GenerateConfigReader::read('request');
 
-        return $path . $middlewarePath->getPath() . '/' . $this->getFileName() . '.php';
+        return $path . $requestPath->getPath() . '/' . $this->getFileName() . '.php';
     }
 
     /**
@@ -84,6 +94,6 @@ class EnableCrossRequestMakeCommand extends GeneratorCommand
      */
     private function getFileName(): string
     {
-        return Str::studly('enable-cross-request');
+        return Str::studly($this->argument('name'));
     }
 }

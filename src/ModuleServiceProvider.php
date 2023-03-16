@@ -20,11 +20,11 @@ class ModuleServiceProvider extends ServiceProvider
             Commands\CommandMakeCommand::class,
             Commands\RouteProviderMakeCommand::class,
             Commands\MiddlewareMakeCommand::class,
-            Commands\AcceptHeaderMakeCommand::class,
-            Commands\EnableCrossRequestMakeCommand::class,
             Commands\ControllerMakeCommand::class,
-            Commands\FormRequestMakeCommand::class,
             Commands\SceneValidatorMakeCommand::class,
+            Commands\RequestMakeCommand::class,
+            Commands\ResponseEnumMakeCommand::class,
+            Commands\BaseServiceMakeCommand::class,
         ]);
         $this->publishes([
             dirname(__DIR__, 1) . '/config/config.php' => config_path('modules.php'),

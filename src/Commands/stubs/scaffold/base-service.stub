@@ -1,0 +1,111 @@
+<?php
+
+
+namespace $NAMESPACE$;
+
+
+use Illuminate\Pagination\LengthAwarePaginator;
+use Modules\$MODULE$\Helpers\ResponseEnum;
+use DateTime;
+use Illuminate\Support\Facades\DB;
+
+/**
+ * @desc:service基类
+ * @author: pwz<857409056@qq.com>
+ */
+class BaseService
+{
+    /**
+     * 处理返回code和message
+     * @var array
+     */
+    protected array $code = ResponseEnum::CLIENT_NOT_FOUND_HTTP_ERROR;
+    /**
+     * 处理返回结果
+     * @var mixed|array
+     */
+    protected mixed $result = [];
+    /**
+     * 是否分页
+     * @var int
+     */
+    protected int $limit = 15;
+
+    public function __construct()
+    {
+        $this->init();
+        $this->limit = request()->input('limit') ?? $this->limit;
+    }
+
+    private function init()
+    {
+        if (request()->method() == 'GET') {
+            $this->code = ResponseEnum::GET_SUCCESS;
+        }
+        if (request()->method() == 'POST') {
+            $this->code = ResponseEnum::HTTP_OK;
+        }
+    }
+
+
+    public function getResult(): mixed
+    {
+        return $this->result;
+    }
+
+    public function getCode(): array
+    {
+        return $this->code;
+    }
+
+    /**
+     * @desc:自定义分页方法
+     *
+     * @param $collection
+     * @param $perPage :每页显示的条数
+     * @param string $pageName
+     * @param null $fragment
+     * @return LengthAwarePaginator
+     * @author: pwz<857409056@qq.com>
+     */
+    protected function paginateCollection($collection, $perPage, $pageName = 'page', $fragment = null)
+    {
+        $currentPage = LengthAwarePaginator::resolveCurrentPage($pageName);
+        $currentPageItems = $collection->slice(($currentPage - 1) * $perPage, $perPage)->values();
+        parse_str(request()->getQueryString(), $query);
+        unset($query[$pageName]);
+        return new LengthAwarePaginator(
+            $currentPageItems,
+            $collection->count(),
+            $perPage,
+            $currentPage,
+        );
+    }
+    public function dbsql()
+    {
+        DB::listen(
+            function ($sql) {
+                foreach ($sql->bindings as $i => $binding) {
+                    if ($binding instanceof DateTime) {
+                        $sql->bindings[$i] = $binding->format('\'Y-m-d H:i:s\'');
+                    } elseif (is_string($binding)) {
+                        $sql->bindings[$i] = "'$binding'";
+                    }
+                }
+
+                // Insert bindings into query
+                $query = str_replace(array('%', '?'), array('%%', '%s'), $sql->sql);
+
+                $query = vsprintf($query, $sql->bindings);
+
+                // Save the query to file
+                $logFile = fopen(
+                    storage_path('logs' . DIRECTORY_SEPARATOR . date('Y-m-d') . '_query.log'),
+                    'a+'
+                );
+                fwrite($logFile, date('Y-m-d H:i:s') . ': ' . $query . PHP_EOL);
+                fclose($logFile);
+            }
+        );
+    }
+}

@@ -1,5 +1,17 @@
 <?php
 
 return [
-    'name' => '$STUDLY_NAME$'
+    'name' => '$STUDLY_NAME$',
+    'debug' => true,
+    'response' => [
+            'json' => [
+                'is_allow_origin' => env('IS_ALLOW_ORIGIN', 1),
+                'allow_origin' => env('ALLOW_ORIGIN', '*'),
+                'allow_credentials' => env('ALLOW_CREDENTIALS', 0),
+                'allow_methods' => env('ALLOW_METHODS', '*'),
+                'allow_headers' => env('ALLOW_HEADERS', '*'),
+                'expose_headers' => env('EXPOSE_HEADERS', '*'),
+                'max_age' => env('MAX_AGE', 0),
+            ]
+        ],
 ];

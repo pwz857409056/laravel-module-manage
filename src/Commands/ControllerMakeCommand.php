@@ -54,8 +54,8 @@ class ControllerMakeCommand extends GeneratorCommand
     protected function getTemplateContents(): string
     {
         $module = $this->laravel['modules'];
-
-        return (new Stub($this->getStubName(), [
+        $stub = $this->option('master') ? '/scaffold/controller.stub' : $this->getStubName();
+        return (new Stub($stub, [
             'MODULENAME' => $module->getStudlyName(),
             'CONTROLLERNAME' => $this->getControllerName(),
             'NAMESPACE' => $module->getStudlyName(),
@@ -90,7 +90,7 @@ class ControllerMakeCommand extends GeneratorCommand
         return [
             ['plain', 'p', InputOption::VALUE_NONE, 'Generate a plain controller', null],
             ['api', null, InputOption::VALUE_NONE, 'Exclude the create and edit methods from the controller.'],
-            ['base', null, InputOption::VALUE_NONE, 'Exclude the create and edit methods from the controller.'],
+            ['master', null, InputOption::VALUE_NONE, 'Indicates the master controller', null],
         ];
     }
 
@@ -133,8 +133,6 @@ class ControllerMakeCommand extends GeneratorCommand
             $stub = '/controller-plain.stub';
         } elseif ($this->option('api') === true) {
             $stub = '/controller-api.stub';
-        } elseif ($this->option('base') === true) {
-            $stub = '/controller-base.stub';
         } else {
             $stub = '/controller.stub';
         }

@@ -38,6 +38,8 @@ return [
             'filter' => ['path' => 'Http/Middleware', 'generate' => true],
             'request' => ['path' => 'Http/Requests', 'generate' => true],
             'provider' => ['path' => 'Providers', 'generate' => true],
+            'service' => ['path' => 'Services', 'generate' => true],
+            'response-enum' => ['path' => 'Helpers', 'generate' => true],
         ],
     ],
     /*

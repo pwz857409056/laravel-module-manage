@@ -7,6 +7,7 @@ use Powitz\LaravelModuleManage\Support\Config\GenerateConfigReader;
 use Powitz\LaravelModuleManage\Support\Stub;
 use Powitz\LaravelModuleManage\Traits\ModuleCommandTrait;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class MiddlewareMakeCommand extends GeneratorCommand
 {
@@ -55,13 +56,23 @@ class MiddlewareMakeCommand extends GeneratorCommand
     }
 
     /**
+     * @return array
+     */
+    protected function getOptions(): array
+    {
+        return [
+            ['master', null, InputOption::VALUE_NONE, 'Indicates the master middleware', null],
+        ];
+    }
+
+    /**
      * @return mixed
      */
     protected function getTemplateContents(): mixed
     {
         $module = $this->laravel['modules'];
-
-        return (new Stub('/middleware.stub', [
+        $stub = $this->option('master') ? '/scaffold' . DIRECTORY_SEPARATOR . $this->argument('name') . '.stub' : DIRECTORY_SEPARATOR . 'middleware.stub';
+        return (new Stub($stub, [
             'NAMESPACE' => $this->getClassNamespace($module),
             'CLASS' => $this->getClass(),
             'LOWER_NAME' => $module->getLowerName(),
