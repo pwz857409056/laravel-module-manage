@@ -74,7 +74,7 @@ class MiddlewareMakeCommand extends GeneratorCommand
         $stub = $this->option('master') ? '/scaffold' . DIRECTORY_SEPARATOR . $this->argument('name') . '.stub' : DIRECTORY_SEPARATOR . 'middleware.stub';
         return (new Stub($stub, [
             'NAMESPACE' => $this->getClassNamespace($module),
-            'CLASS' => $this->getClass(),
+            'CLASS' => $this->getFileName(),
             'LOWER_NAME' => $module->getLowerName(),
         ]))->render();
     }
