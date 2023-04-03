@@ -77,6 +77,7 @@ class MiddlewareMakeCommand extends GeneratorCommand
             'CLASS' => $this->getFileName(),
             'LOWER_NAME' => $module->getLowerName(),
         ]))->render();
+
     }
 
     /**
